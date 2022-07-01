@@ -1,1 +1,23 @@
+_________________In one terminal____________________
+sudo mn --topo single,4
 
+
+
+_________________In a new terminal____________________
+sudo mn --topo single,4
+sudo ovs-vsctl add-br mybr
+sudo ovs-vsctl show
+sudo ovs-vsctl del-port s1 s1-eth1
+sudo ovs-vsctl del-port s1 s1-eth2
+sudo ovs-vsctl del-port s1 s1-eth3
+sudo ovs-vsctl del-port s1 s1-eth4
+sudo ovs-vsctl add-port s1 s1-eth1 tag=1
+sudo ovs-vsctl add-port s1 s1-eth3 tag=1
+sudo ovs-vsctl add-port s1 s1-eth2 tag=2
+sudo ovs-vsctl add-port s1 s1-eth4 tag=2
+sudo ovs-vsctl show
+
+
+
+__________________Again in mininet_________________
+pingall
