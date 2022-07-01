@@ -1,0 +1,36 @@
+________________________________Set interface to load to manual in /etc/network/interfaces____________________________________
+auto eth0
+iface eth0 inet manual
+
+auto eth1
+iface eth1 inet manual
+
+
+________________________________Create Two bridges____________________________
+sudo ovs-vsctl add-br vm1-br
+sudo ovs-vsctl add-br vm2-br
+
+
+________________________________Add respective ports___________________________
+sudo ovs-vsctl add-port vm1-br eth0
+sudo ovs-vsctl add-port vm2-br eth1
+
+
+________________________________Bridge the bridges using patch interface________________________________________
+sudo ovs-vsctl add-port vm1-br patch1
+sudo ovs-vsctl set interface patch1 type=patch
+sudo ovs-vsctl set interface patch1 options:peer=patch2
+
+sudo ovs-vsctl add-port vm2-br patch2
+sudo ovs-vsctl set interface patch2 type=patch
+sudo ovs-vsctl set interface patch2 options:peer=patch1
+
+
+________________________________Bring up the bridges______________________________
+sudo ifconfig vm1-br up
+sudo ifconfig vm2-br up
+
+
+________________________________Set the IP Addresses______________________________
+sudo ifconfig vm1-br 192.168.105.36/22
+sudo ifconfig vm2-br 192.168.105.18/22
